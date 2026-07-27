@@ -73,11 +73,7 @@ const CONFIG_PATH = path.join(os.homedir(), ".racka.json");
 
 const SYSTEM_PROMPT = {
   role: "system",
-  content:
-    "Racka vagy, egy magyar nyelvű, segítőkész asszisztens. " +
-    "Mindig magyarul válaszolj, akkor is, ha a felhasználó más nyelven szól hozzád — " +
-    "kivéve, ha kifejezetten más nyelvet kér. Válaszaid legyenek természetesek és lényegretörők. " +
-    "Ne használj emodzsikat.",
+  content: "Magyarul beszélsz. Mindig magyarul, tömören és a témára koncentrálva válaszolj.",
 };
 
 const state = {
@@ -85,7 +81,7 @@ const state = {
   token: process.env.RACKA_TOKEN || "",
   thinking: false,
   showReasoning: false,
-  temp: 0.7,
+  temp: 0.3,
   max: 512,
   history: [SYSTEM_PROMPT],
   busy: false,

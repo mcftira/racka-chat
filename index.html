@@ -335,7 +335,7 @@
             <input type="password" id="optToken" placeholder="hf_&hellip;" autocomplete="off">
           </label>
           <label>Hőmérséklet (temperature)
-            <input type="number" id="optTemp" min="0" max="2" step="0.1" value="0.7">
+            <input type="number" id="optTemp" min="0" max="2" step="0.1" value="0.3">
           </label>
           <label>Max tokenek
             <input type="number" id="optMax" min="16" max="4096" step="16" value="512">
@@ -364,18 +364,14 @@
   const settings = loadSettings();
   $("optUrl").value = settings.url || "";
   $("optToken").value = settings.token || "";
-  $("optTemp").value = settings.temp ?? 0.7;
+  $("optTemp").value = settings.temp ?? 0.3;
   $("optMax").value = settings.max ?? 512;
   $("optThinking").checked = !!settings.thinking;
   $("optShowThink").checked = settings.showThink !== false;
 
   const SYSTEM_PROMPT = {
     role: "system",
-    content:
-      "Racka vagy, egy magyar nyelvű, segítőkész asszisztens. " +
-      "Mindig magyarul válaszolj, akkor is, ha a felhasználó más nyelven szól hozzád — " +
-      "kivéve, ha kifejezetten más nyelvet kér. Válaszaid legyenek természetesek és lényegretörők. " +
-      "Ne használj emodzsikat.",
+    content: "Magyarul beszélsz. Mindig magyarul, tömören és a témára koncentrálva válaszolj.",
   };
 
   let history = [SYSTEM_PROMPT];
@@ -391,7 +387,7 @@
     localStorage.setItem(LS_KEY, JSON.stringify({
       url: $("optUrl").value.trim(),
       token: $("optToken").value.trim(),
-      temp: parseFloat($("optTemp").value) || 0.7,
+      temp: parseFloat($("optTemp").value) || 0.3,
       max: parseInt($("optMax").value, 10) || 512,
       thinking: $("optThinking").checked,
       showThink: $("optShowThink").checked,
@@ -404,7 +400,7 @@
     return {
       url: $("optUrl").value.trim().replace(/\/+$/, ""),
       token: $("optToken").value.trim(),
-      temp: parseFloat($("optTemp").value) || 0.7,
+      temp: parseFloat($("optTemp").value) || 0.3,
       max: parseInt($("optMax").value, 10) || 512,
       thinking: $("optThinking").checked,
       showThink: $("optShowThink").checked,
