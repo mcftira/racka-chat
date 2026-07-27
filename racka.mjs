@@ -64,7 +64,7 @@ function banner() {
   console.log();
   console.log(`   (\`·.                    ${C.bold}${C.red}R A C K A${C.reset}`);
   console.log(`    )  )  bééé!            ${C.bold}${C.green}C H A T${C.reset}`);
-  console.log(`   (__(__) ~~~~            ${C.gray}magyar juh-LLM · TUI${C.reset}`);
+  console.log(`   (__(__) ~~~~            ${C.gray}magyar juhmodell · TUI${C.reset}`);
   console.log();
   console.log(`${C.gray}/segitseg — parancsok · /kilepes — kilépés${C.reset}`);
   console.log();
@@ -154,7 +154,7 @@ async function handle(text) {
         return;
       case "/hofok": {
         const v = parseFloat(arg);
-        if (!isNaN(v) && v >= 0 && v <= 2) { state.temp = v; console.log(`${C.gray}hőfok: ${v}${C.reset}\n`); }
+        if (!isNaN(v) && v >= 0 && v <= 2) { state.temp = v; console.log(`${C.gray}hőmérséklet: ${v}${C.reset}\n`); }
         else console.log(`${C.yellow}használat: /hofok 0..2${C.reset}\n`);
         return;
       }
@@ -192,7 +192,7 @@ async function main() {
   if (!state.token) state.token = (await ask(`${C.gray}API token:${C.reset} `)).trim();
   saveConfig();
   console.log(`${C.gray}szerver: ${state.url}${C.reset}`);
-  console.log(`${C.gray}gondolkodás: ${state.thinking ? "BE" : "KI"} · hőfok: ${state.temp} · max: ${state.max}${C.reset}\n`);
+  console.log(`${C.gray}gondolkodás: ${state.thinking ? "BE" : "KI"} · hőmérséklet: ${state.temp} · max: ${state.max}${C.reset}\n`);
   console.log(`${C.green}racka${C.reset} ${C.gray}›${C.reset} Szia! Racka vagyok. Kérdezz bátran magyarul!\n`);
   rl.setPrompt(`${C.red}te${C.reset} ${C.gray}›${C.reset} `);
   rl.prompt();

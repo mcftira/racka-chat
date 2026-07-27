@@ -1,6 +1,6 @@
 # Racka Chat
 
-Magyar pixel-art chat felület és könnyű TUI harness a Racka-4B modellhez
+Magyar pixel-art chat felület és pehelykönnyű terminál-kliens a Racka-4B modellhez
 (és bármilyen OpenAI-kompatibilis végponthoz).
 
 *A Hungarian pixel-art web chat and a lightweight terminal harness for the
