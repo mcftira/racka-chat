@@ -73,15 +73,17 @@ const CONFIG_PATH = path.join(os.homedir(), ".racka.json");
 
 const SYSTEM_PROMPT = {
   role: "system",
-  content: "Magyarul beszélsz. Mindig magyarul, tömören és a témára koncentrálva válaszolj.",
+  content: "You are a helpful Hungarian assistant.",
 };
 
+// Sampling per the creators' model card (elte-nlp): temperature 0.6, top_p 0.8,
+// repetition_penalty 1.1, presence_penalty 1.1.
 const state = {
   url: process.env.RACKA_URL || "",
   token: process.env.RACKA_TOKEN || "",
   thinking: false,
   showReasoning: false,
-  temp: 0.3,
+  temp: 0.6,
   max: 512,
   history: [SYSTEM_PROMPT],
   busy: false,
@@ -122,6 +124,9 @@ async function chat(userText) {
     messages: state.history,
     max_tokens: state.max,
     temperature: state.temp,
+    top_p: 0.8,
+    repetition_penalty: 1.1,
+    presence_penalty: 1.1,
     stream: true,
     chat_template_kwargs: { enable_thinking: state.thinking },
   };

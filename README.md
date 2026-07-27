@@ -71,6 +71,25 @@ ezért vLLM.)
 Bármilyen más OpenAI-kompatibilis végpont is működik — a kliens csak
 `/v1/chat/completions`-t és `/v1/models`-t hív.
 
+## Ajánlott beállítások (a készítők szerint) / Creator-recommended config
+
+Az elte-nlp model cardja ezt ajánlja — a kliensek alapbeállításai ezt követik:
+
+- **Sampling:** temperature **0.6**, top_p **0.8**, repetition_penalty **1.1**, presence_penalty **1.1**
+- **System prompt:** `You are a helpful Hungarian assistant.`
+- **Thinking:** `enable_thinking` tetszés szerint (alap: ki; `/gondolkodas on`)
+- **Kontextus:** 32 768 token natívan, 131 072 YaRN-nel
+  (`--rope-scaling '{"rope_type":"yarn","factor":4.0,"original_max_position_embeddings":32768}'`)
+
+Fontos kikötések a készítőktől:
+
+- A Racka-4B **nem általános chatügynöknek** készült: edge-feladatok,
+  few-shot pipeline-ok és magyar fine-tuning alap. Komplex feladatokra
+  27–30B+ modellt javasolnak.
+- **Nincs alignment/SFT** — kutatási és nem kereskedelmi célra
+  (CC-BY-NC-SA-4.0), végfelhasználós appba nem ajánlják.
+- Papír: [MSZNY 2026](https://rgai.inf.u-szeged.hu/sites/rgai.inf.u-szeged.hu/files/mszny2026.pdf)
+
 ## Licenc / License
 
 MIT — lásd `LICENSE`. A modell licenci külön: CC-BY-NC-SA-4.0 (elte-nlp).
