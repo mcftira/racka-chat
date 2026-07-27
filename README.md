@@ -17,7 +17,8 @@ alapú magyar nyelvmodell) két kliensfelülete:
   CRT scanlines, streaming válaszok, thinking-megjelenítés, helyi
   tárolású beállítások (localStorage). Csak nyisd meg böngészőben.
 - **`racka.mjs`** — nulla függőség, Node ≥ 18 TUI. Streaming, magyar
-  parancsok, ANSI zászlóbanner.
+  parancsok, ANSI zászlóbanner, és egy spinner régies magyar igékkel
+  (töpreng, mélázik, szöszmötöl… — az első négyet maga Racka választotta).
 
 A Racka juhfajta Magyarország nemzeti kincse — a modell nevéhez méltóan a
 felület is büszkén magyar.

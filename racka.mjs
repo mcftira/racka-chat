@@ -32,6 +32,43 @@ const C = {
   yellow: "\x1b[38;5;220m",
 };
 
+// Spinner words — the first four were chosen by Racka itself (asked live; it
+// answered "töpreng, mélázik, szöszmötöl, tűnődik" and then repeated them with
+// great conviction). The rest are human-curated archaic Hungarian verbs in
+// the same spirit.
+const WORDS = [
+  "töpreng", "mélázik", "szöszmötöl", "tűnődik",
+  "mereng", "elmélkedik", "latolgat", "mérlegel", "agyal", "rágódik",
+  "tépelődik", "habozik", "ábrándozik", "révedezik", "búslakodik",
+  "bibelődik", "matat", "morzsol", "kutat", "gubózik", "dörmög",
+  "morog", "filozofál", "okoskodik", "spekulál", "fantáziál",
+];
+const FRAMES = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
+
+function startSpinner() {
+  let fi = 0;
+  let word = WORDS[Math.floor(Math.random() * WORDS.length)];
+  const draw = () => {
+    const frame = FRAMES[fi++ % FRAMES.length];
+    process.stdout.write(`\r${C.green}${frame}${C.reset} ${C.gray}racka ${word}…${C.reset}   \r`);
+  };
+  const frameTimer = setInterval(draw, 80);
+  const wordTimer = setInterval(() => {
+    word = WORDS[Math.floor(Math.random() * WORDS.length)];
+  }, 2200);
+  draw();
+  let stopped = false;
+  return {
+    stop() {
+      if (stopped) return;
+      stopped = true;
+      clearInterval(frameTimer);
+      clearInterval(wordTimer);
+      process.stdout.write("\r" + " ".repeat(48) + "\r");
+    },
+  };
+}
+
 const CONFIG_PATH = path.join(os.homedir(), ".racka.json");
 
 const state = {
@@ -83,14 +120,31 @@ async function chat(userText) {
     stream: true,
     chat_template_kwargs: { enable_thinking: state.thinking },
   };
-  const r = await fetch(state.url.replace(/\/+$/, "") + "/v1/chat/completions", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: "Bearer " + state.token },
-    body: JSON.stringify(payload),
-  });
-  if (!r.ok || !r.body) throw new Error("HTTP " + r.status + " " + (await r.text().catch(() => "")));
+  const spin = startSpinner();
+  let r;
+  try {
+    r = await fetch(state.url.replace(/\/+$/, "") + "/v1/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: "Bearer " + state.token },
+      body: JSON.stringify(payload),
+    });
+  } catch (e) {
+    spin.stop();
+    throw e;
+  }
+  if (!r.ok || !r.body) {
+    spin.stop();
+    throw new Error("HTTP " + r.status + " " + (await r.text().catch(() => "")));
+  }
 
-  process.stdout.write(`${C.green}racka${C.reset} ${C.gray}›${C.reset} `);
+  let firstDelta = true;
+  const onFirstDelta = () => {
+    if (!firstDelta) return;
+    firstDelta = false;
+    spin.stop();
+    process.stdout.write(`${C.green}racka${C.reset} ${C.gray}›${C.reset} `);
+  };
+
   const reader = r.body.getReader();
   const decoder = new TextDecoder();
   let buf = "", content = "", reasoning = "";
@@ -111,16 +165,19 @@ async function chat(userText) {
         const d = ch.delta || {};
         const rsn = d.reasoning_content || d.reasoning || "";
         if (rsn) {
+          onFirstDelta();
           reasoning += rsn;
           if (state.showReasoning) process.stdout.write(`${C.gray}${rsn}${C.reset}`);
         }
         if (d.content) {
+          onFirstDelta();
           content += d.content;
           process.stdout.write(d.content);
         }
       }
     }
   }
+  spin.stop();
   process.stdout.write("\n\n");
   if (content) state.history.push({ role: "assistant", content });
   else console.log(`${C.yellow}(üres válasz)${C.reset}\n`);
