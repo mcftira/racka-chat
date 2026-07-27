@@ -369,7 +369,16 @@
   $("optThinking").checked = !!settings.thinking;
   $("optShowThink").checked = settings.showThink !== false;
 
-  let history = [];
+  const SYSTEM_PROMPT = {
+    role: "system",
+    content:
+      "Racka vagy, egy magyar nyelvű, segítőkész asszisztens. " +
+      "Mindig magyarul válaszolj, akkor is, ha a felhasználó más nyelven szól hozzád — " +
+      "kivéve, ha kifejezetten más nyelvet kér. Válaszaid legyenek természetesek és lényegretörők. " +
+      "Ne használj emodzsikat.",
+  };
+
+  let history = [SYSTEM_PROMPT];
   let busy = false;
   let aborter = null;
 
@@ -542,7 +551,7 @@
   btnSend.addEventListener("click", send);
   $("btnClear").addEventListener("click", () => {
     if (aborter) aborter.abort();
-    history = [];
+    history = [SYSTEM_PROMPT];
     chat.innerHTML = "";
     addGreeting();
   });

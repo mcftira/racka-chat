@@ -71,6 +71,15 @@ function startSpinner() {
 
 const CONFIG_PATH = path.join(os.homedir(), ".racka.json");
 
+const SYSTEM_PROMPT = {
+  role: "system",
+  content:
+    "Racka vagy, egy magyar nyelvű, segítőkész asszisztens. " +
+    "Mindig magyarul válaszolj, akkor is, ha a felhasználó más nyelven szól hozzád — " +
+    "kivéve, ha kifejezetten más nyelvet kér. Válaszaid legyenek természetesek és lényegretörők. " +
+    "Ne használj emodzsikat.",
+};
+
 const state = {
   url: process.env.RACKA_URL || "",
   token: process.env.RACKA_TOKEN || "",
@@ -78,7 +87,7 @@ const state = {
   showReasoning: false,
   temp: 0.7,
   max: 512,
-  history: [],
+  history: [SYSTEM_PROMPT],
   busy: false,
 };
 
@@ -222,7 +231,7 @@ async function handle(text) {
         return;
       }
       case "/torles":
-        state.history = [];
+        state.history = [SYSTEM_PROMPT];
         console.log(`${C.gray}előzmények törölve${C.reset}\n`);
         return;
       default:
