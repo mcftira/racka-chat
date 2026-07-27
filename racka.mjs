@@ -81,10 +81,10 @@ const SYSTEM_PROMPT = {
 const state = {
   url: process.env.RACKA_URL || "",
   token: process.env.RACKA_TOKEN || "",
-  thinking: false,
-  showReasoning: false,
-  temp: 0.6,
-  max: 512,
+  thinking: true,
+  showReasoning: true,
+  temp: 0.3,
+  max: 2048,
   history: [SYSTEM_PROMPT],
   busy: false,
 };
