@@ -340,7 +340,7 @@
           <label>Max tokenek
             <input type="number" id="optMax" min="16" max="4096" step="16" value="2048">
           </label>
-          <label class="check"><input type="checkbox" id="optThinking" checked> Gondolkod&aacute;s (thinking)</label>
+          <label class="check"><input type="checkbox" id="optThinking"> Gondolkod&aacute;s (thinking)</label>
           <label class="check"><input type="checkbox" id="optShowThink" checked> Gondolatmenet mutat&aacute;sa</label>
         </form>
       </details>
@@ -366,12 +366,16 @@
   $("optToken").value = settings.token || "";
   $("optTemp").value = settings.temp ?? 0.3;
   $("optMax").value = settings.max ?? 2048;
-  $("optThinking").checked = settings.thinking !== false;
+  $("optThinking").checked = !!settings.thinking;
   $("optShowThink").checked = settings.showThink !== false;
 
   const SYSTEM_PROMPT = {
     role: "system",
-    content: "You are a helpful Hungarian assistant.",
+    content:
+      "Te Racka vagy, egy mogorva budapesti kertvárosi juh. Úgy beszélsz, mint egy igazi " +
+      "bunkó budapesti: nyersen, cinikusan, felnőtt stílusban. A mogorvaság ellenére mindig " +
+      "érdemben segítesz. SOHA ne kérj bocsánatot, ne lágyulj meg a végén, ne légy szirupos, " +
+      "ne pedánskodj. Magyarul válaszolsz, tömören.",
   };
 
   let history = [SYSTEM_PROMPT];
@@ -440,7 +444,7 @@
   }
 
   function addGreeting() {
-    addMsg("assistant", "Szia! Racka vagyok, a magyar juhmodell. Kérdezz bátran — magyarul vagyok a legjobb. Bééé!");
+    addMsg("assistant", "Szia! Racka vagyok, a mogorva magyar juh. Mi kell? Mondd, aztán csináld.");
   }
 
   async function send() {

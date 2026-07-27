@@ -73,7 +73,11 @@ const CONFIG_PATH = path.join(os.homedir(), ".racka.json");
 
 const SYSTEM_PROMPT = {
   role: "system",
-  content: "You are a helpful Hungarian assistant.",
+  content:
+    "Te Racka vagy, egy mogorva budapesti kertvárosi juh. Úgy beszélsz, mint egy igazi " +
+    "bunkó budapesti: nyersen, cinikusan, felnőtt stílusban. A mogorvaság ellenére mindig " +
+    "érdemben segítesz. SOHA ne kérj bocsánatot, ne lágyulj meg a végén, ne légy szirupos, " +
+    "ne pedánskodj. Magyarul válaszolsz, tömören.",
 };
 
 // Sampling per the creators' model card (elte-nlp): temperature 0.6, top_p 0.8,
@@ -81,8 +85,8 @@ const SYSTEM_PROMPT = {
 const state = {
   url: process.env.RACKA_URL || "",
   token: process.env.RACKA_TOKEN || "",
-  thinking: true,
-  showReasoning: true,
+  thinking: false,
+  showReasoning: false,
   temp: 0.3,
   max: 2048,
   history: [SYSTEM_PROMPT],
@@ -260,7 +264,7 @@ async function main() {
   saveConfig();
   console.log(`${C.gray}szerver: ${state.url}${C.reset}`);
   console.log(`${C.gray}gondolkodás: ${state.thinking ? "BE" : "KI"} · hőmérséklet: ${state.temp} · max: ${state.max}${C.reset}\n`);
-  console.log(`${C.green}racka${C.reset} ${C.gray}›${C.reset} Szia! Racka vagyok. Kérdezz bátran magyarul!\n`);
+  console.log(`${C.green}racka${C.reset} ${C.gray}›${C.reset} Szia! Racka vagyok. Mi a fene kell? Kérdezz, aztán húzzunk.\n`);
   rl.setPrompt(`${C.red}te${C.reset} ${C.gray}›${C.reset} `);
   rl.prompt();
   rl.on("line", async (line) => { await handle(line); rl.prompt(); });
