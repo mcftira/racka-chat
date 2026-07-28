@@ -124,7 +124,7 @@ function ask(q) { return new Promise((res) => rl.question(q, res)); }
 async function chat(userText) {
   state.history.push({ role: "user", content: userText });
   const payload = {
-    model: "/repository",
+    model: "racka",
     messages: state.history,
     max_tokens: state.max,
     temperature: state.temp,
